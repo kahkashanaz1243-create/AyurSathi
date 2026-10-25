@@ -14,6 +14,9 @@ class AyurSathiApp extends StatefulWidget {
 }
 
 class _AyurSathiAppState extends State<AyurSathiApp> {
+  final GlobalKey<NavigatorState> _navigatorKey =
+      GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +26,9 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
   void _openFeature(String routeInfo) {
     final parts = routeInfo.split('|');
     final id = int.tryParse(parts.first);
-    final hindi = parts.length < 2 || parts[1] == 'hi';
+
+    final bool hindi =
+        parts.length < 2 || parts[1].toLowerCase() == 'hi';
 
     if (id == null || id < 1 || id > features.length) {
       return;
@@ -33,7 +38,14 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
       (item) => item.id == id,
     );
 
-    Navigator.of(context).push(
+    final navigator = _navigatorKey.currentState;
+
+    if (navigator == null) {
+      debugPrint('AyurSathi: Navigator is not ready.');
+      return;
+    }
+
+    navigator.push(
       MaterialPageRoute<void>(
         builder: (_) => FeatureScreen(
           feature: feature,
@@ -48,6 +60,7 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
     const seed = Color(0xFF16856B);
 
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       title: 'AyurSathi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
