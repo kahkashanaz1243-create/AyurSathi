@@ -127,6 +127,7 @@ jobs:
 
       - name: Get Flutter dependencies
         run: flutter pub get
+         run: dart run flutter_launcher_icons
 
       - name: Fix Google Mobile Ads Gradle compatibility
         shell: bash
