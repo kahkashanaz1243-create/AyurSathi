@@ -1,0 +1,173 @@
+name: Build AyurSathi APK from ZIP
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'AyurSathi_Complete_Project.zip'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Extract source and build APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+
+      - name: Extract project ZIP into workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP_FILE="$GITHUB_WORKSPACE/AyurSathi_Complete_Project.zip"
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "AyurSathi_Complete_Project.zip is missing from repository root."
+            exit 1
+          fi
+          mkdir -p /tmp/ayursathi_source
+          unzip -q -o "$ZIP_FILE" -d /tmp/ayursathi_source
+          if [ ! -f /tmp/ayursathi_source/pubspec.yaml ]; then
+            echo "ZIP must contain pubspec.yaml at its root."
+            echo "Archive contents:"
+            find /tmp/ayursathi_source -maxdepth 3 -type f | head -100
+            exit 1
+          fi
+          cp -a /tmp/ayursathi_source/. "$GITHUB_WORKSPACE/"
+          echo "Project extracted."
+          ls -la
+          test -f pubspec.yaml
+          test -f lib/main.dart
+
+      - name: Generate Android platform files
+        run: flutter create --platforms=android .
+
+      - name: Configure Android core library desugaring
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          candidates = [Path('android/app/build.gradle.kts'), Path('android/app/build.gradle')]
+          path = next((p for p in candidates if p.exists()), None)
+          if path is None:
+              raise SystemExit('Android app Gradle file not found')
+          text = path.read_text()
+          kts = path.name.endswith('.kts')
+          flag = 'isCoreLibraryDesugaringEnabled' if kts else 'coreLibraryDesugaringEnabled'
+          flag_line = 'isCoreLibraryDesugaringEnabled = true' if kts else 'coreLibraryDesugaringEnabled true'
+          dependency = 'coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")' if kts else "coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'"
+          if flag not in text:
+              text, count = re.subn(r'compileOptions\s*\{', lambda m: m.group(0) + '\n        ' + flag_line, text, count=1)
+              if count == 0:
+                  raise SystemExit('compileOptions block not found')
+          if 'desugar_jdk_libs' not in text:
+              match = re.search(r'(?m)^\s*dependencies\s*\{', text)
+              if match:
+                  text = text[:match.end()] + '\n    ' + dependency + text[match.end():]
+              else:
+                  text += '\n\ndependencies {\n    ' + dependency + '\n}\n'
+          path.write_text(text)
+          print('Desugaring configured:', path)
+          PY
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Patch Google Mobile Ads Gradle compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          PLUGIN_GRADLE="$(find "$HOME/.pub-cache" -path '*/google_mobile_ads-5.3.1/android/build.gradle' -print -quit)"
+          if [ -z "$PLUGIN_GRADLE" ]; then
+            echo 'google_mobile_ads 5.3.1 Gradle file not found'
+            exit 1
+          fi
+          python3 - "$PLUGIN_GRADLE" <<'PY'
+          from pathlib import Path
+          import re, sys
+          p = Path(sys.argv[1])
+          s = p.read_text()
+          # Transform the legacy nested form into a direct configuration callback.
+          pat = re.compile(r'configurations\s*\{\s*all\s*\{')
+          m = pat.search(s)
+          if m:
+              def matching_brace(src, start):
+                  depth = 0
+                  quote = None
+                  escaped = False
+                  for i in range(start, len(src)):
+                      c = src[i]
+                      if quote:
+                          if escaped: escaped = False
+                          elif c == '\\': escaped = True
+                          elif c == quote: quote = None
+                          continue
+                      if c in ('"', "'"): quote = c
+                      elif c == '{': depth += 1
+                      elif c == '}':
+                          depth -= 1
+                          if depth == 0: return i
+                  raise SystemExit('Could not match Gradle braces')
+              outer_open = s.find('{', m.start())
+              inner_open = s.find('{', outer_open + 1)
+              inner_close = matching_brace(s, inner_open)
+              outer_close = matching_brace(s, outer_open)
+              body = s[inner_open + 1:inner_close]
+              s = s[:m.start()] + 'configurations.configureEach {' + body + '}' + s[outer_close + 1:]
+          # Handle a direct configurations.all { ... } expression.
+          s = re.sub(r'configurations\s*\.\s*all\s*\{', 'configurations.configureEach {', s)
+          p.write_text(s)
+          print('Patched plugin Gradle file:', p)
+          for n, line in enumerate(s.splitlines(), 1):
+              if 45 <= n <= 72: print(f'{n}: {line}')
+          PY
+
+      - name: Add Google test AdMob application ID
+        shell: bash
+        run: |
+          set -euo pipefail
+          MANIFEST='android/app/src/main/AndroidManifest.xml'
+          if ! grep -q 'com.google.android.gms.ads.APPLICATION_ID' "$MANIFEST"; then
+            python3 - <<'PY'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text()
+          start = s.find('<application')
+          if start < 0: raise SystemExit('application tag not found')
+          end = s.find('>', start)
+          if end < 0: raise SystemExit('application tag end not found')
+          meta = '\n        <meta-data\n            android:name="com.google.android.gms.ads.APPLICATION_ID"\n            android:value="ca-app-pub-3940256099942544~3347511713" />'
+          p.write_text(s[:end + 1] + meta + s[end + 1:])
+          PY
+          fi
+
+      - name: Analyze Dart code
+        continue-on-error: true
+        run: flutter analyze
+
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AyurSathi-APK
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
