@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void openFeature(_HomeFeature feature) {
     if (widget.onOpenFeature != null) {
-      widget.onOpenFeature!(feature.id);
+     widget.onOpenFeature!('${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}');
       return;
     }
 
