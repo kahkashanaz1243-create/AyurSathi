@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -424,12 +423,12 @@ class _FeatureScreenState extends State<FeatureScreen> {
         return Card(
           child: ExpansionTile(
             leading: const Icon(Icons.eco_outlined),
-            title: Text(hi ? item.hi : item.en),
+            title: Text(hi ? item.title : item.englishTitle),
             childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(hi ? item.descriptionHi : item.descriptionEn),
+                child: Text(hi ? item.description : item.englishDescription),
               ),
             ],
           ),
