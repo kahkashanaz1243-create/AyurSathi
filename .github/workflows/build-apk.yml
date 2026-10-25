@@ -125,9 +125,12 @@ jobs:
           print("Desugaring configured:", path)
           PY
 
+
       - name: Get Flutter dependencies
         run: flutter pub get
-         run: dart run flutter_launcher_icons
+
+      - name: Generate app launcher icons
+        run: dart run flutter_launcher_icons
 
       - name: Fix Google Mobile Ads Gradle compatibility
         shell: bash
