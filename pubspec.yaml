@@ -1,3 +1,4 @@
+
 name: ayur_sathi
 description: AyurSathi offline bilingual Ayurveda and wellness app.
 publish_to: "none"
@@ -9,8 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   flutter_localizations:
     sdk: flutter
+
   intl: ^0.20.2
   shared_preferences: ^2.5.3
   sqflite: ^2.4.2
@@ -30,3 +33,6 @@ dependency_overrides:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/ayursathi_logo.png
