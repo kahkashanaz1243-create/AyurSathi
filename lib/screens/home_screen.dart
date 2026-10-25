@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../services/ads_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final ValueChanged<String>? onOpenFeature;
@@ -115,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void openFeature(_HomeFeature feature) {
     if (widget.onOpenFeature != null) {
-     widget.onOpenFeature!('${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}');
+      widget.onOpenFeature!(
+        '${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}',
+      );
       return;
     }
 
@@ -144,7 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
         titleSpacing: 12,
         title: Row(
           children: [
-            // AyurSathi logo
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
@@ -202,14 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() => isHindi = value);
             },
             itemBuilder: (context) => const [
-              PopupMenuItem(
-                value: true,
-                child: Text('हिंदी'),
-              ),
-              PopupMenuItem(
-                value: false,
-                child: Text('English'),
-              ),
+              PopupMenuItem(value: true, child: Text('हिंदी')),
+              PopupMenuItem(value: false, child: Text('English')),
             ],
             child: Container(
               margin: const EdgeInsets.only(right: 12),
@@ -237,10 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    color: teal,
-                  ),
+                  const Icon(Icons.arrow_drop_down, color: teal),
                 ],
               ),
             ),
@@ -248,8 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
+        bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
           children: [
             _buildWelcomeCard(),
             const SizedBox(height: 22),
@@ -320,6 +315,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: const SafeArea(
+        top: false,
+        child: _HomeBannerAd(),
       ),
     );
   }
@@ -439,9 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: const Color(0xFFE5EFEB),
-            ),
+            border: Border.all(color: const Color(0xFFE5EFEB)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.025),
@@ -480,9 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                isHindi
-                    ? feature.subtitleHindi
-                    : feature.subtitleEnglish,
+                isHindi ? feature.subtitleHindi : feature.subtitleEnglish,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -564,4 +559,59 @@ class _HomeFeature {
     required this.icon,
     required this.color,
   });
+}
+
+class _HomeBannerAd extends StatefulWidget {
+  const _HomeBannerAd();
+
+  @override
+  State<_HomeBannerAd> createState() => _HomeBannerAdState();
+}
+
+class _HomeBannerAdState extends State<_HomeBannerAd> {
+  BannerAd? _bannerAd;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _bannerAd = AdsService.createBanner(
+      onLoaded: () {
+        if (mounted) {
+          setState(() => _loaded = true);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ad = _bannerAd;
+
+    if (!_loaded || ad == null) {
+      return const SizedBox(
+        width: 320,
+        height: 50,
+      );
+    }
+
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      width: double.infinity,
+      height: ad.size.height.toDouble(),
+      child: SizedBox(
+        width: ad.size.width.toDouble(),
+        height: ad.size.height.toDouble(),
+        child: AdWidget(ad: ad),
+      ),
+    );
+  }
 }
