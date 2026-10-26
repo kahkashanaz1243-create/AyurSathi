@@ -117,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void openFeature(_HomeFeature feature) {
     // Show only at a natural transition and only when the interval is due.
-    AdsService.showInterstitialIfDue();
+    AdsService.showInterstitialIfDue(
+  onContinue: () {},
+);
     if (widget.onOpenFeature != null) {
       widget.onOpenFeature!(
         '${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}',
