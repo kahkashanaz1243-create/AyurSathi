@@ -163,6 +163,18 @@ const mudras = <GuideItem>[
     'आराम से बैठें और हाथों को घुटनों या गोद में रखें। रीढ़ को सहज रूप से सीधा रखें।',
     'Sit comfortably and rest your hands on your knees or lap. Keep the spine naturally upright.',
   ),
+  GuideItem(
+    'धर्मचक्र मुद्रा',
+    'Dharmachakra Mudra',
+    'दोनों हाथों की उँगलियों को सामने आराम से व्यवस्थित करें। तनाव न रखें।',
+    'Position both hands\' fingers comfortably in front of you. Avoid strain.',
+  ),
+  GuideItem(
+    'उषास मुद्रा',
+    'Ushas Mudra',
+    'दोनों हाथों की उँगलियों को हल्के से जोड़ें। दर्द होने पर रुकें।',
+    'Gently join the fingers of both hands. Stop if it hurts.',
+  ),
 ];
 const plants = <GuideItem>[
   GuideItem(
@@ -344,6 +356,18 @@ const plants = <GuideItem>[
     'Garlic',
     'लहसुन भोजन में स्वाद बढ़ाता है। सप्लीमेंट लेने पर कुछ दवाओं, खासकर रक्त पतला करने वाली दवाओं, से परस्पर प्रभाव हो सकता है।',
     'Garlic adds flavor to food. Supplements may interact with some medicines, especially blood thinners.',
+  ),
+  GuideItem(
+    'पारिजात',
+    'Night-flowering Jasmine',
+    'यह सुगंधित फूल वाला पौधा है। औषधीय सेवन से पहले विशेषज्ञ से सलाह लें।',
+    'This is an aromatic flowering plant. Seek expert advice before medicinal use.',
+  ),
+  GuideItem(
+    'अपराजिता',
+    'Butterfly Pea',
+    'इसके फूलों का उपयोग कुछ पेयों में होता है। केवल खाद्य-सुरक्षित फूल लें।',
+    'Its flowers are used in some beverages. Use only food-safe flowers.',
   ),
 ];
 
@@ -528,6 +552,18 @@ const recipes = <GuideItem>[
     'साबुत अनाज की ब्रेड में धुली सब्जियाँ और इच्छानुसार पनीर भरें।',
     'Fill whole-grain bread with washed vegetables and paneer if desired.',
   ),
+  GuideItem(
+    'राजमा चावल',
+    'Rajma Rice',
+    'राजमा को भिगोकर पूरी तरह पकाएँ और पके चावल के साथ परोसें।',
+    'Soak kidney beans and cook thoroughly. Serve with cooked rice.',
+  ),
+  GuideItem(
+    'दही चावल',
+    'Curd Rice',
+    'ठंडे पके चावल में ताजा दही मिलाएँ और भोजन को सुरक्षित रखें।',
+    'Mix fresh yogurt into cooled rice and store the dish safely.',
+  ),
 ];
 const teas = <GuideItem>[
   GuideItem(
@@ -649,6 +685,18 @@ const teas = <GuideItem>[
     'Cinnamon Cardamom Infusion',
     'दालचीनी का छोटा टुकड़ा और एक इलायची गर्म पानी में कुछ मिनट रखें।',
     'Steep a small piece of cinnamon and one cardamom pod in hot water.',
+  ),
+  GuideItem(
+    'सादा गर्म पानी',
+    'Warm Water',
+    'स्वच्छ पानी को आरामदायक गर्म तापमान पर लें। बहुत गर्म पेय से बचें।',
+    'Drink clean water at a comfortably warm temperature. Avoid very hot drinks.',
+  ),
+  GuideItem(
+    'नींबू-पुदीना पानी',
+    'Lemon Mint Water',
+    'साफ पानी में नींबू का रस और धुले पुदीने के पत्ते मिलाएँ।',
+    'Add lemon juice and washed mint leaves to clean water.',
   ),
 ];
 
@@ -875,4 +923,69 @@ const unaniTerms = <GuideItem>[
     'लऊक एक गाढ़ी पारंपरिक तैयारी है जिसे कुछ उत्पादों में धीरे-धीरे चाटा जाता है।',
     'Laooq is a thick traditional preparation that some products are intended to be licked slowly.',
   ),
+  GuideItem(
+    'मुरक्कब',
+    'Murakkab / Compound',
+    'यूनानी शब्दावली में मुरक्कब का अर्थ मिश्रित या कई घटकों से बना हो सकता है।',
+    'In Unani terminology, Murakkab can mean compound or made from multiple components.',
+  ),
+  GuideItem(
+    'नुस्खा',
+    'Nuskha / Prescription',
+    'नुस्खा उपचार या औषधि संबंधी लिखित निर्देश हो सकता है।',
+    'A Nuskha may be written instructions for treatment or medicines.',
+  ),
 ];
+
+
+// अतिरिक्त सामग्री: डेली रूटीन
+const dailyRoutineGuide = <GuideItem>[
+  GuideItem('नियमित समय पर उठें', 'Wake Up Regularly', 'हर दिन लगभग एक ही समय पर उठने की कोशिश करें।', 'Try to wake up at about the same time each day.'),
+  GuideItem('स्वच्छ पानी पिएँ', 'Drink Clean Water', 'प्यास और अपनी जरूरत के अनुसार स्वच्छ पानी पिएँ।', 'Drink clean water according to thirst and personal needs.'),
+  GuideItem('हल्की स्ट्रेचिंग', 'Gentle Stretching', 'आरामदायक हल्की स्ट्रेचिंग करें और दर्द होने पर रुकें।', 'Do gentle stretches and stop if they cause pain.'),
+  GuideItem('सुबह की रोशनी', 'Morning Daylight', 'यदि संभव हो तो कुछ समय प्राकृतिक रोशनी में बिताएँ।', 'If possible, spend some time in natural daylight.'),
+  GuideItem('संतुलित नाश्ता', 'Balanced Breakfast', 'अपनी जरूरत के अनुसार विविध और संतुलित भोजन चुनें।', 'Choose varied, balanced foods according to your needs.'),
+  GuideItem('काम के बीच विराम', 'Work Breaks', 'लंबे समय तक बैठे रहने पर बीच-बीच में उठकर चलें।', 'Stand up and move regularly if sitting for long periods.'),
+  GuideItem('दैनिक गतिविधि', 'Daily Activity', 'अपनी क्षमता के अनुसार चलना या अन्य गतिविधि चुनें।', 'Choose walking or another activity suited to your ability.'),
+  GuideItem('शांत सोने की दिनचर्या', 'Calm Bedtime Routine', 'सोने से पहले शांत गतिविधि अपनाने की कोशिश करें।', 'Try a calming activity before bedtime.'),
+];
+
+// अतिरिक्त सामग्री: प्रकृति के शैक्षिक नोट्स
+const prakritiGuide = <GuideItem>[
+  GuideItem('प्रकृति क्या है?', 'What Is Prakriti?', 'आयुर्वेद में प्रकृति व्यक्ति की पारंपरिक शारीरिक-मानसिक प्रवृत्ति का वर्णन करने वाली अवधारणा है।', 'In Ayurveda, Prakriti is a traditional concept describing physical and mental tendencies.'),
+  GuideItem('वात का पारंपरिक वर्णन', 'Traditional Description of Vata', 'वात को पारंपरिक रूप से गति और परिवर्तन से जोड़ा जाता है। यह चिकित्सीय निदान नहीं है।', 'Vata is traditionally associated with movement and change. This is not a medical diagnosis.'),
+  GuideItem('पित्त का पारंपरिक वर्णन', 'Traditional Description of Pitta', 'पित्त को पारंपरिक रूप से रूपांतरण और गर्मी से जोड़ा जाता है।', 'Pitta is traditionally associated with transformation and heat.'),
+  GuideItem('कफ का पारंपरिक वर्णन', 'Traditional Description of Kapha', 'कफ को पारंपरिक रूप से स्थिरता और संरचना से जोड़ा जाता है।', 'Kapha is traditionally associated with stability and structure.'),
+  GuideItem('परिणाम का अर्थ', 'Understanding Results', 'प्रश्नावली आत्म-चिंतन के लिए है, बीमारी पहचानने या इलाज चुनने के लिए नहीं।', 'The questionnaire is for reflection, not for diagnosing illness or choosing treatment.'),
+  GuideItem('स्वास्थ्य सलाह', 'Health Advice', 'लक्षण या स्वास्थ्य चिंता होने पर योग्य स्वास्थ्य पेशेवर से सलाह लें।', 'Consult a qualified health professional for symptoms or health concerns.'),
+];
+
+// अतिरिक्त सामग्री: वेलनेस जर्नल संकेत
+const wellnessJournalPrompts = <GuideItem>[
+  GuideItem('आज मेरा मूड कैसा है?', 'How Is My Mood Today?', 'अपने मूड का वर्णन एक या दो वाक्यों में करें।', 'Describe your mood in one or two sentences.'),
+  GuideItem('आज किस बात के लिए आभारी हूँ?', 'What Am I Grateful For?', 'आज की एक छोटी बात लिखें जिसके लिए आप आभारी हैं।', 'Write one small thing you feel grateful for today.'),
+  GuideItem('आज क्या अच्छा हुआ?', 'What Went Well Today?', 'दिन की एक अच्छी घटना या उपलब्धि दर्ज करें।', 'Record one positive event or accomplishment from today.'),
+  GuideItem('आज मेरी ऊर्जा कैसी रही?', 'How Was My Energy Today?', 'दिन में ऊर्जा के उतार-चढ़ाव और संभावित कारण नोट करें।', 'Note changes in your energy and possible reasons.'),
+  GuideItem('कल का छोटा लक्ष्य', 'One Small Goal for Tomorrow', 'ऐसा छोटा और व्यावहारिक लक्ष्य लिखें जिसे पूरा किया जा सके।', 'Write a small, practical goal for tomorrow.'),
+  GuideItem('नींद की तैयारी', 'Preparing for Sleep', 'सोने से पहले कौन-सी शांत गतिविधि मददगार रही, यह नोट करें।', 'Note which calming activity helped you prepare for sleep.'),
+];
+
+// अतिरिक्त सामग्री: आँखों के आराम के सुझाव
+const eyeBreakGuide = <GuideItem>[
+  GuideItem('20-20-20 नियम', '20-20-20 Rule', 'लगभग हर 20 मिनट बाद 20 फीट दूर किसी वस्तु को 20 सेकंड देखें।', 'About every 20 minutes, look at something 20 feet away for 20 seconds.'),
+  GuideItem('पलकें झपकाएँ', 'Blink Often', 'स्क्रीन पर ध्यान देते समय पलकें झपकाना याद रखें।', 'Remember to blink while concentrating on a screen.'),
+  GuideItem('स्क्रीन की दूरी', 'Screen Distance', 'स्क्रीन को आरामदायक दूरी पर रखें और जरूरत हो तो अक्षरों का आकार बढ़ाएँ।', 'Keep the screen at a comfortable distance and enlarge text if needed.'),
+  GuideItem('रोशनी समायोजित करें', 'Adjust Lighting', 'स्क्रीन और कमरे की रोशनी को इस तरह रखें कि तेज प्रतिबिंब न पड़े।', 'Adjust screen and room lighting to reduce glare.'),
+  GuideItem('दर्द या धुंधलापन', 'Pain or Blurred Vision', 'लगातार दर्द या धुंधला दिखने पर नेत्र-विशेषज्ञ से सलाह लें।', 'Seek eye-care advice for persistent pain or blurred vision.'),
+];
+
+// अतिरिक्त सामग्री: हेल्थ रिपोर्ट के विषय
+const healthReportGuide = <GuideItem>[
+  GuideItem('रिपोर्ट की तारीख', 'Report Date', 'रिपोर्ट की तारीख दर्ज करें ताकि रिकॉर्ड का क्रम स्पष्ट रहे।', 'Record the date so the order of reports remains clear.'),
+  GuideItem('स्वास्थ्य लक्ष्य', 'Health Goals', 'अपने लक्ष्य को स्पष्ट और व्यावहारिक शब्दों में लिखें।', 'Describe your goal in clear and practical terms.'),
+  GuideItem('दैनिक आदतें', 'Daily Habits', 'नींद, गतिविधि, पानी और भोजन संबंधी स्वयं दर्ज की गई आदतें नोट करें।', 'Note self-reported habits related to sleep, activity, water, and food.'),
+  GuideItem('माप और इकाइयाँ', 'Measurements and Units', 'किसी माप के साथ उसकी इकाई और तारीख दर्ज करें।', 'Record the unit and date alongside each measurement.'),
+  GuideItem('डॉक्टर से पूछने के सवाल', 'Questions for a Clinician', 'अपॉइंटमेंट से पहले अपने सवाल लिख लें।', 'Write down your questions before an appointment.'),
+  GuideItem('रिपोर्ट की सीमा', 'Report Limitations', 'ऐप की रिपोर्ट रिकॉर्ड रखने के लिए है, निदान का विकल्प नहीं।', 'The app report is for record keeping, not a substitute for diagnosis.'),
+];
+
