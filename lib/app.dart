@@ -47,15 +47,20 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
       return;
     }
 
-    navigator.push(
-      MaterialPageRoute<void>(
-        builder: (_) => FeatureScreen(
-          feature: feature,
-          hindi: hindi,
-        ),
-      ),
+    
+    AdsService.showInterstitialIfDue(
+      onContinue: () {
+        navigator.push(
+          MaterialPageRoute<void>(
+            builder: (_) => FeatureScreen(
+              feature: feature,
+              hindi: hindi,
+            ),
+          ),
+        );
+      },
     );
-  }
+
 
   @override
   Widget build(BuildContext context) {
