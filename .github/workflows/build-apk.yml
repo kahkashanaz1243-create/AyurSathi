@@ -229,7 +229,7 @@ jobs:
           metadata = (
               '\n        <meta-data\n'
               '            android:name="com.google.android.gms.ads.APPLICATION_ID"\n'
-              '            android:value="ca-app-pub-3940256099942544~3347511713" />'
+              '            android:value="ca-app-pub-3580956288241135~2524153105" />'
           )
 
           text = text[:end + 1] + metadata + text[end + 1:]
