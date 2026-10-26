@@ -53,7 +53,9 @@ jobs:
 
       - name: Generate Android platform files
         run: flutter create --platforms=android .
-
+      - name: Show Android package name
+        run: |
+          grep -E 'applicationId|namespace' android/app/build.gradle.kts android/app/build.gradle 2>/dev/null || true
       - name: Configure Android desugaring
         shell: bash
         run: |
