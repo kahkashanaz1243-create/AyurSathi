@@ -246,10 +246,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
           children: [
             _buildWelcomeCard(),
-            const SizedBox(height: 22),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? 'आपकी वेलनेस यात्रा'
                         : 'Your Wellness Journey',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF203D36),
                     ),
@@ -276,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 13,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -284,16 +284,16 @@ class _HomeScreenState extends State<HomeScreen> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: columns,
                 crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                mainAxisExtent: 174,
+                mainAxisSpacing: 8,
+                mainAxisExtent: 126,
               ),
               itemBuilder: (context, index) {
                 return _buildFeatureCard(features[index]);
               },
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 12),
             _buildSafetyNote(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Center(
               child: Text(
                 isHindi
@@ -310,24 +310,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const SafeArea(
-        top: false,
-        child: AppBannerAd(),
-      ),
     );
   }
 
   Widget _buildWelcomeCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF00796B), Color(0xFF43A047)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
             color: teal.withOpacity(0.18),
@@ -343,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
             top: -12,
             child: Icon(
               Icons.spa_rounded,
-              size: 120,
+              size: 80,
               color: Colors.white.withOpacity(0.10),
             ),
           ),
@@ -368,30 +364,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 9),
               Text(
                 isHindi
                     ? 'स्वस्थ जीवन की शुरुआत'
                     : 'Begin Your Wellness Journey',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 23,
-                  height: 1.25,
+                  fontSize: 19,
+                  height: 1.2,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 2),
               Text(
                 isHindi
                     ? 'योग, हर्बल जानकारी, भोजन और दैनिक आदतों के लिए आपका साथी।'
                     : 'Your companion for yoga, herbal knowledge, food, and daily habits.',
                 style: const TextStyle(
                   color: Colors.white,
-                  height: 1.5,
-                  fontSize: 13,
+                  height: 1.3,
+                  fontSize: 11.5,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 9),
               Row(
                 children: [
                   const Icon(
@@ -424,12 +420,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildFeatureCard(_HomeFeature feature) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(15),
         onTap: () => openFeature(feature),
         child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(9),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFE5EFEB)),
@@ -445,16 +441,16 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 46,
-                height: 46,
+                width: 34,
+                height: 34,
                 decoration: BoxDecoration(
                   color: feature.color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(11),
                 ),
                 child: Icon(
                   feature.icon,
                   color: feature.color,
-                  size: 26,
+                  size: 20,
                 ),
               ),
               const Spacer(),
@@ -464,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Color(0xFF203D36),
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w800,
                   height: 1.25,
                 ),
@@ -476,8 +472,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black54,
-                  fontSize: 10.5,
-                  height: 1.35,
+                  fontSize: 9,
+                  height: 1.15,
                 ),
               ),
             ],
@@ -590,14 +586,11 @@ class _AppBannerAdState extends State<AppBannerAd> {
     final ad = _bannerAd;
 
     if (!_loaded || ad == null) {
-      return const SizedBox(
-        width: 320,
-        height: 50,
-      );
+      return const SizedBox.shrink();
     }
 
     return Container(
-      color: Colors.white,
+      color: const Color(0xFFF5FAF7),
       alignment: Alignment.center,
       width: double.infinity,
       height: ad.size.height.toDouble(),
