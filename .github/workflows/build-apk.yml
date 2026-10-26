@@ -303,8 +303,86 @@ jobs:
 
 
       
+      - name: Configure release signing
+        shell: bash
+        env:
+          UPLOAD_KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          test -n "$UPLOAD_KEYSTORE_BASE64"
+          test -n "$KEYSTORE_PASSWORD"
+          test -n "$KEY_PASSWORD"
+          test -n "$KEY_ALIAS"
+
+          echo "$UPLOAD_KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("android/app/build.gradle.kts")
+          if not p.exists():
+              raise SystemExit("ERROR: build.gradle.kts not found")
+
+          s = p.read_text()
+
+          imports = "import java.io.FileInputStream\nimport java.util.Properties\n"
+          if "import java.util.Properties" not in s:
+              s = imports + s
+
+          props = '''val keystoreProperties = Properties()
+          val keystorePropertiesFile = rootProject.file("key.properties")
+          if (keystorePropertiesFile.exists()) {
+              keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+          }
+
+          '''
+          if "val keystoreProperties =" not in s:
+              s, n = re.subn(r'(?m)^android\s*\{', props + 'android {', s, count=1)
+              if n != 1:
+                  raise SystemExit("ERROR: android block not found")
+
+          signing = '''    signingConfigs {
+              create("release") {
+                  keyAlias = keystoreProperties["keyAlias"] as String
+                  keyPassword = keystoreProperties["keyPassword"] as String
+                  storeFile = file(keystoreProperties["storeFile"] as String)
+                  storePassword = keystoreProperties["storePassword"] as String
+              }
+          }
+
+          '''
+          if 'create("release")' not in s:
+              s, n = re.subn(r'(?m)^    buildTypes\s*\{', signing + '    buildTypes {', s, count=1)
+              if n != 1:
+                  raise SystemExit("ERROR: buildTypes block not found")
+
+          s, n = re.subn(
+              r'signingConfig\s*=\s*signingConfigs\.getByName\("debug"\)',
+              'signingConfig = signingConfigs.getByName("release")',
+              s,
+              count=1
+          )
+          if n != 1:
+              raise SystemExit("ERROR: debug signing configuration not found")
+
+          p.write_text(s)
+          print("Release signing configured.")
+          PY
+
       - name: Build release AAB
         run: flutter build appbundle --release
+
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
