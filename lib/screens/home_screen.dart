@@ -116,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   void openFeature(_HomeFeature feature) {
+    // Show only at a natural transition and only when the interval is due.
+    AdsService.showInterstitialIfDue();
     if (widget.onOpenFeature != null) {
       widget.onOpenFeature!(
         '${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}',
@@ -262,14 +264,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Text(
-                  '${features.length} ${isHindi ? 'फीचर' : 'Features'}',
-                  style: const TextStyle(
-                    color: teal,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 6),
@@ -318,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: const SafeArea(
         top: false,
-        child: _HomeBannerAd(),
+        child: AppBannerAd(),
       ),
     );
   }
@@ -561,14 +555,14 @@ class _HomeFeature {
   });
 }
 
-class _HomeBannerAd extends StatefulWidget {
-  const _HomeBannerAd();
+class AppBannerAd extends StatefulWidget {
+  const AppBannerAd({super.key});
 
   @override
-  State<_HomeBannerAd> createState() => _HomeBannerAdState();
+  State<AppBannerAd> createState() => _AppBannerAdState();
 }
 
-class _HomeBannerAdState extends State<_HomeBannerAd> {
+class _AppBannerAdState extends State<AppBannerAd> {
   BannerAd? _bannerAd;
   bool _loaded = false;
 
