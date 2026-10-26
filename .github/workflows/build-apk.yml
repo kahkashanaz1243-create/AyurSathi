@@ -53,6 +53,53 @@ jobs:
 
       - name: Generate Android platform files
         run: flutter create --platforms=android .
+
+      - name: Set AyurSathi package name
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          package = "com.kirz.ayursathi"
+          candidates = [
+              Path("android/app/build.gradle.kts"),
+              Path("android/app/build.gradle"),
+          ]
+          gradle = next((p for p in candidates if p.exists()), None)
+          if gradle is None:
+              raise SystemExit("Android app Gradle file not found")
+
+          text = gradle.read_text()
+          ns_pattern = r'(?m)^(\s*namespace\s*(?:=\s*)?)["\'][^"\']+["\']'
+          app_pattern = r'(?m)^(\s*applicationId\s*(?:=\s*)?)["\'][^"\']+["\']'
+          text, ns_count = re.subn(ns_pattern, lambda m: m.group(1) + '"' + package + '"', text, count=1)
+          text, app_count = re.subn(app_pattern, lambda m: m.group(1) + '"' + package + '"', text, count=1)
+          if ns_count != 1 or app_count != 1:
+              raise SystemExit(f"Expected one namespace and applicationId; found namespace={ns_count}, applicationId={app_count}")
+          gradle.write_text(text)
+
+          # Keep the generated Kotlin activity package aligned with the namespace.
+          activity = Path("android/app/src/main/kotlin")
+          matches = list(activity.rglob("MainActivity.kt")) if activity.exists() else []
+          if len(matches) != 1:
+              raise SystemExit(f"Expected one MainActivity.kt; found {len(matches)}")
+          main = matches[0]
+          source = main.read_text()
+          source, count = re.subn(r'(?m)^package\s+[\w.]+\s*$', 'package ' + package, source, count=1)
+          if count != 1:
+              raise SystemExit("Could not update MainActivity.kt package declaration")
+          destination = activity.joinpath(*package.split('.')) / "MainActivity.kt"
+          destination.parent.mkdir(parents=True, exist_ok=True)
+          destination.write_text(source)
+          if main != destination:
+              main.unlink()
+          print("Package name configured:", package)
+          print("Gradle file:", gradle)
+          print("MainActivity:", destination)
+          PY
+
       - name: Show Android package name
         run: |
           grep -E 'applicationId|namespace' android/app/build.gradle.kts android/app/build.gradle 2>/dev/null || true
