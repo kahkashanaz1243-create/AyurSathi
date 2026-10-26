@@ -245,13 +245,13 @@ jobs:
         continue-on-error: true
         run: flutter analyze
 
-      - name: Build debug APK
-        run: flutter build apk --debug
+      - name: Build release APK
+  run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: AyurSathi-APK
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 14
