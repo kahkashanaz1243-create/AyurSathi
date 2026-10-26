@@ -7,10 +7,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AdsService {
   // Google test ad IDs. Replace with your own before production release.
   static const String bannerId =
-      'ca-app-pub-3940256099942544/6300978111';
+    'ca-app-pub-3580956288241135/6226674529';
 
-  static const String interstitialId =
-      'ca-app-pub-3940256099942544/1033173712';
+static const String interstitialId =
+    'ca-app-pub-3580956288241135/8661266175';
 
   static DateTime? _lastInterstitialTime;
   static InterstitialAd? _interstitialAd;
