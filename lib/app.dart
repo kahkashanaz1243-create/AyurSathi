@@ -5,6 +5,7 @@ import 'models/feature.dart';
 import 'screens/feature_screen.dart';
 import 'screens/home_screen.dart';
 import 'services/notification_service.dart';
+import 'services/ads_service.dart';
 
 class AyurSathiApp extends StatefulWidget {
   const AyurSathiApp({super.key});
@@ -21,6 +22,7 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
   void initState() {
     super.initState();
     NotificationService.initialize();
+    AdsService.loadInterstitial();
   }
 
   void _openFeature(String routeInfo) {
@@ -87,6 +89,17 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
           ),
         ),
       ),
+      builder: (context, child) {
+        return Column(
+          children: [
+            Expanded(child: child ?? const SizedBox.shrink()),
+            const SafeArea(
+              top: false,
+              child: AppBannerAd(),
+            ),
+          ],
+        );
+      },
       home: HomeScreen(
         onOpenFeature: _openFeature,
       ),
