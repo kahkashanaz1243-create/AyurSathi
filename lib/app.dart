@@ -90,14 +90,14 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
         ),
       ),
       builder: (context, child) {
-        return Column(
-          children: [
-            Expanded(child: child ?? const SizedBox.shrink()),
-            const SafeArea(
-              top: false,
-              child: AppBannerAd(),
-            ),
-          ],
+        return ColoredBox(
+          color: const Color(0xFFF5FAF7),
+          child: Column(
+            children: [
+              Expanded(child: child ?? const SizedBox.shrink()),
+              const AppBannerAd(),
+            ],
+          ),
         );
       },
       home: HomeScreen(
