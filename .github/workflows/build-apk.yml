@@ -302,11 +302,8 @@ jobs:
           PY
 
 
-      - name: Analyze Dart code
-        continue-on-error: true
-        run: flutter analyze
-
-            - name: Build release AAB
+      
+      - name: Build release AAB
         run: flutter build appbundle --release
 
       - name: Upload AAB artifact
@@ -316,3 +313,4 @@ jobs:
           path: build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
           retention-days: 14
+
