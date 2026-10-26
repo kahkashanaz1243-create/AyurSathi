@@ -78,6 +78,11 @@ class _FeatureScreenState extends State<FeatureScreen> {
     ('अगले दिन की योजना बनाना', 'Plan the next day'),
     ('सोने का नियमित समय रखना', 'Keep a regular bedtime'),
     ('पर्याप्त नींद का अवसर देना', 'Allow enough time for sleep'),
+    ('दिन में कुछ देर चलना', 'Take a short walk during the day'),
+    ('पानी पीने के लिए विराम लेना', 'Pause to drink water'),
+    ('काम की जगह व्यवस्थित करना', 'Organize your workspace'),
+    ('अपनी पसंद की गतिविधि करना', 'Do an activity you enjoy'),
+    ('दिन के अंत में आत्मचिंतन करना', 'Reflect at the end of the day'),
   ];
 
   // Educational self-reflection only; not a validated medical assessment.
@@ -581,6 +586,22 @@ class _FeatureScreenState extends State<FeatureScreen> {
         const SizedBox(height: 10),
         Card(
           child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(hi ? 'लिखने के लिए संकेत' : 'Writing prompts', style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 6),
+                ...wellnessJournalPrompts.take(4).map((prompt) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text('• ${hi ? prompt.title : prompt.englishTitle}'),
+                )),
+              ],
+            ),
+          ),
+        ),
+        Card(
+          child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -889,6 +910,11 @@ class _FeatureScreenState extends State<FeatureScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                ...healthReportGuide.take(4).map((tip) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text('• ${hi ? tip.title : tip.englishTitle}: ${hi ? tip.description : tip.englishDescription}'),
+                )),
                 const SizedBox(height: 10),
                 Text(
                   hi
