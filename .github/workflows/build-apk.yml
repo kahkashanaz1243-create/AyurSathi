@@ -245,15 +245,12 @@ jobs:
         run: flutter analyze
 
       - name: Build release APK
-  run: flutter build apk --release
+        run: flutter build apk --release
 
-    - name: Build release APK
-      run: flutter build apk --release
-
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: AyurSathi-APK
-        path: build/app/outputs/flutter-apk/app-release.apk
-        if-no-files-found: error
-        retention-days: 14
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AyurSathi-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
