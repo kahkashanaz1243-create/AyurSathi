@@ -15,8 +15,9 @@ class AdsService {
   static DateTime? _lastInterstitialTime;
   static InterstitialAd? _interstitialAd;
   static bool _isLoading = false;
+  static bool _hasShownInterstitial = false;
 
-  static const Duration adInterval = Duration(seconds: 65);
+  static const Duration adInterval = Duration(seconds: 60);
 
   static BannerAd createBanner({
     VoidCallback? onLoaded,
@@ -64,7 +65,7 @@ class AdsService {
     final now = DateTime.now();
     final last = _lastInterstitialTime;
 
-    if (last != null && now.difference(last) < adInterval) {
+    if (!_hasShownInterstitial || (last != null && now.difference(last) < adInterval)) {
       return;
     }
 
@@ -76,6 +77,7 @@ class AdsService {
 
     _interstitialAd = null;
     _lastInterstitialTime = now;
+    _hasShownInterstitial = true;
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
