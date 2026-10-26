@@ -198,47 +198,60 @@ jobs:
                   print(f"{number}: {line}")
           PY
 
-      - name: Add Google test AdMob application ID
+
+      - name: Configure and verify AdMob App ID
         shell: bash
         run: |
           set -euo pipefail
-
           MANIFEST="android/app/src/main/AndroidManifest.xml"
+          test -f "$MANIFEST"
 
-          if ! grep -q \
-            "com.google.android.gms.ads.APPLICATION_ID" \
-            "$MANIFEST"; then
-
-            python3 - <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
+          import re
 
-          path = Path(
-              "android/app/src/main/AndroidManifest.xml"
-          )
+          path = Path("android/app/src/main/AndroidManifest.xml")
           text = path.read_text()
+          app_id = "ca-app-pub-3580956288241135~2524153105"
+          name = "com.google.android.gms.ads.APPLICATION_ID"
 
-          start = text.find("<application")
-          if start < 0:
-              raise SystemExit("application tag not found")
-
-          end = text.find(">", start)
-          if end < 0:
-              raise SystemExit("application tag end not found")
+          pattern = re.compile(
+              r'<meta-data\b(?=[^>]*\bandroid:name\s*=\s*["\']'
+              + re.escape(name)
+              + r'["\'])[^>]*/?>',
+              re.DOTALL
+          )
 
           metadata = (
-              '\n        <meta-data\n'
-              '            android:name="com.google.android.gms.ads.APPLICATION_ID"\n'
-              '            android:value="ca-app-pub-3580956288241135~2524153105" />'
+              '<meta-data\n'
+              '            android:name="'
+              + name
+              + '"\n'
+              '            android:value="'
+              + app_id
+              + '" />'
           )
 
-          text = text[:end + 1] + metadata + text[end + 1:]
+          if pattern.search(text):
+              text = pattern.sub(metadata, text, count=1)
+          else:
+              start = text.find("<application")
+              if start < 0:
+                  raise SystemExit("ERROR: application tag missing")
+              end = text.find(">", start)
+              if end < 0:
+                  raise SystemExit("ERROR: application tag invalid")
+              text = text[:end + 1] + "\n        " + metadata + text[end + 1:]
+
           path.write_text(text)
 
-          print("Test AdMob application ID added.")
+          check = path.read_text()
+          if app_id not in check or name not in check:
+              raise SystemExit("ERROR: AdMob App ID verification failed")
+
+          print("AdMob App ID verified:", app_id)
           PY
-          else
-            echo "AdMob application ID already exists."
-          fi
+
 
       - name: Analyze Dart code
         continue-on-error: true
