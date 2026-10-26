@@ -60,7 +60,7 @@ class _AyurSathiAppState extends State<AyurSathiApp> {
         );
       },
     );
-
+  }
 
   @override
   Widget build(BuildContext context) {
