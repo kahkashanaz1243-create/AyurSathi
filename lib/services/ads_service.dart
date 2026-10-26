@@ -7,7 +7,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AdsService {
   // Real AdMob ad unit IDs for AyurSathi.
   static const String bannerId =
-    'ca-app-pub-3940256099942544/9214589741';
+    
+'ca-app-pub-3580956288241135/6226674529';
+
 
 static const String interstitialId =
     'ca-app-pub-3580956288241135/8661266175';
