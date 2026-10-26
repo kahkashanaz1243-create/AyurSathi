@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdsService {
-  // Google test ad IDs. Replace with your own before production release.
+  // Real AdMob ad unit IDs for AyurSathi.
   static const String bannerId =
     'ca-app-pub-3580956288241135/6226674529';
 
@@ -65,7 +65,9 @@ static const String interstitialId =
     final now = DateTime.now();
     final last = _lastInterstitialTime;
 
-    if (!_hasShownInterstitial || (last != null && now.difference(last) < adInterval)) {
+    if (_hasShownInterstitial &&
+        last != null &&
+        now.difference(last) < adInterval) {
       return;
     }
 
