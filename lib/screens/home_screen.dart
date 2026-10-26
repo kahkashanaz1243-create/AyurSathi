@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../services/ads_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final ValueChanged<String>? onOpenFeature;
@@ -117,9 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void openFeature(_HomeFeature feature) {
     // Show only at a natural transition and only when the interval is due.
-    AdsService.showInterstitialIfDue(
-  onContinue: () {},
-);
+  
     if (widget.onOpenFeature != null) {
       widget.onOpenFeature!(
         '${features.indexOf(feature) + 1}|${isHindi ? 'hi' : 'en'}',
