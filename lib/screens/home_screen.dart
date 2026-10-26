@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../services/ads_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final ValueChanged<String>? onOpenFeature;
